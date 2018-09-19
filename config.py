@@ -43,7 +43,7 @@ def configure(keymap):
     keymap_firefox["C-o"] = "C-t"
     keymap_firefox["A-o"] = "C-S-t"
     keymap_firefox["C-e"] = "End"
-    keymap_firefox["C-u"] = ["Home", "S-End", "Back"]
+    keymap_firefox["C-u"] = ["Home", "S-End", "C-x"]
 
     keymap_firefox["C-d"] = "Delete"
     keymap_firefox["C-h"] = "Left"
