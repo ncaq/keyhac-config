@@ -26,6 +26,13 @@ def configure(keymap):
     # Open the clipboard history list
     keymap_global["W-z"] = keymap.command_ClipboardList
 
+    activateFirefox = keymap.ActivateWindowCommand(exe_name="firefox.exe")
+    keymap_global["W-h"] = activateFirefox
+    activateTermnial = keymap.ActivateWindowCommand(exe_name="mintty.exe")
+    keymap_global["W-t"] = activateTermnial
+    activateEmacs = keymap.ActivateWindowCommand(exe_name="emacs.exe")
+    keymap_global["W-n"] = activateEmacs
+
     keymap_firefox = keymap.defineWindowKeymap(
         exe_name="firefox.exe", class_name="MozillaWindowClass")
 
