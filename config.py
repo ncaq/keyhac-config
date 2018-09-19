@@ -36,6 +36,7 @@ def configure(keymap):
     keymap_firefox = keymap.defineWindowKeymap(
         exe_name="firefox.exe", class_name="MozillaWindowClass")
 
+    keymap_firefox["C-y"] = "C-v"
     keymap_firefox["C-g"] = "Esc"
     keymap_firefox["C-Slash"] = "C-z"
 
