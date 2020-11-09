@@ -28,7 +28,7 @@ def configure(keymap):
 
     activateFirefox = keymap.ActivateWindowCommand(exe_name="firefox.exe")
     keymap_global["W-h"] = activateFirefox
-    activateTermnial = keymap.ActivateWindowCommand(exe_name="mintty.exe")
+    activateTermnial = keymap.ActivateWindowCommand(exe_name="WindowsTerminal.exe")
     keymap_global["W-t"] = activateTermnial
     activateEmacs = keymap.ActivateWindowCommand(exe_name="emacs.exe")
     keymap_global["W-n"] = activateEmacs
