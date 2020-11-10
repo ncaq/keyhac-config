@@ -5,6 +5,35 @@ import datetime
 import pyauto
 from keyhac import *
 
+def set_keymap_weblike(keymap, keymap_window):
+    keymap_window["C-y"] = "C-v"
+    keymap_window["C-g"] = "Esc"
+    keymap_window["C-Slash"] = "C-z"
+
+    keymap_window["C-a"] = "Home"
+    keymap_window["C-o"] = "C-t"
+    keymap_window["A-o"] = "C-S-t"
+    keymap_window["C-e"] = "End"
+    keymap_window["C-u"] = ["Home", "S-End", "C-x"]
+
+    keymap_window["C-d"] = "Delete"
+    keymap_window["C-h"] = "Left"
+    keymap_window["A-h"] = "C-Left"
+    keymap_window["C-t"] = "Up"
+    keymap_window["C-n"] = "Down"
+    keymap_window["C-s"] = "Right"
+    keymap_window["A-s"] = "C-Right"
+
+    keymap_window["C-q"] = "C-w"
+    keymap_window["C-k"] = ["S-End", "C-x"]
+    keymap_window["C-x"] = keymap.defineMultiStrokeKeymap("C-X")
+    keymap_window["C-x"]["C-g"] = "Esc"
+    keymap_window["C-x"]["C-h"] = "C-a"
+    keymap_window["C-b"] = "Back"
+    keymap_window["A-b"] = "C-Back"
+    keymap_window["C-m"] = "Enter"
+    keymap_window["C-w"] = "C-x"
+    keymap_window["A-w"] = "C-c"
 
 def configure(keymap):
     keymap.editor = "emacsclient.exe"
@@ -21,46 +50,25 @@ def configure(keymap):
     # --------------------------------------------------------------------
 
     keymap_global = keymap.defineWindowKeymap()
-
-    # Clipboard history related
-    # Open the clipboard history list
+    keymap_global["W-q"] = "A-F4"
     keymap_global["W-z"] = keymap.command_ClipboardList
 
-    activateFirefox = keymap.ActivateWindowCommand(exe_name="firefox.exe")
-    keymap_global["W-h"] = activateFirefox
-    activateTermnial = keymap.ActivateWindowCommand(exe_name="WindowsTerminal.exe")
-    keymap_global["W-t"] = activateTermnial
-    activateEmacs = keymap.ActivateWindowCommand(exe_name="emacs.exe")
-    keymap_global["W-n"] = activateEmacs
+    keymap_global["W-h"] = keymap.ActivateWindowCommand(exe_name="firefox.exe")
+    keymap_global["W-t"] = keymap.ActivateWindowCommand(exe_name="WindowsTerminal.exe")
+    keymap_global["W-n"] = keymap.ActivateWindowCommand(exe_name="emacs.exe")
+    keymap_global["W-Minus"] = keymap.ActivateWindowCommand(exe_name="slack.exe")
 
-    keymap_firefox = keymap.defineWindowKeymap(
-        exe_name="firefox.exe", class_name="MozillaWindowClass")
+    set_keymap_weblike(keymap, keymap.defineWindowKeymap(
+        exe_name="firefox.exe", class_name="MozillaWindowClass"))
+    set_keymap_weblike(keymap, keymap.defineWindowKeymap(
+        exe_name="thunderbird.exe", class_name="MozillaWindowClass"))
 
-    keymap_firefox["C-y"] = "C-v"
-    keymap_firefox["C-g"] = "Esc"
-    keymap_firefox["C-Slash"] = "C-z"
+    keymap_emacs = keymap.defineWindowKeymap(exe_name="emacs.exe")
+    keymap_emacs["C-m"] = "Enter"
 
-    keymap_firefox["C-a"] = "Home"
-    keymap_firefox["C-o"] = "C-t"
-    keymap_firefox["A-o"] = "C-S-t"
-    keymap_firefox["C-e"] = "End"
-    keymap_firefox["C-u"] = ["Home", "S-End", "C-x"]
-
-    keymap_firefox["C-d"] = "Delete"
-    keymap_firefox["C-h"] = "Left"
-    keymap_firefox["A-h"] = "C-Left"
-    keymap_firefox["C-t"] = "Up"
-    keymap_firefox["C-n"] = "Down"
-    keymap_firefox["C-s"] = "Right"
-    keymap_firefox["A-s"] = "C-Right"
-
-    keymap_firefox["C-q"] = "C-w"
-    keymap_firefox["C-k"] = ["S-End", "C-x"]
-    keymap_firefox["C-x"] = keymap.defineMultiStrokeKeymap("C-X")
-    keymap_firefox["C-x"]["C-g"] = "Esc"
-    keymap_firefox["C-x"]["C-h"] = "C-a"
-    keymap_firefox["C-b"] = "Back"
-    keymap_firefox["A-b"] = "C-Back"
-    keymap_firefox["C-m"] = "Enter"
-    keymap_firefox["C-w"] = "C-x"
-    keymap_firefox["A-w"] = "C-c"
+    keymap_slack = keymap.defineWindowKeymap(exe_name="slack.exe")
+    set_keymap_weblike(keymap, keymap_slack)
+    keymap_slack["A-n"] = "A-S-Down"
+    keymap_slack["A-t"] = "A-S-Up"
+    keymap_slack["A-j"] = "A-Down"
+    keymap_slack["A-k"] = "A-Up"
