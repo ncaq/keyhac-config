@@ -13,7 +13,7 @@ def configure(keymap):
     # Customizing the display
 
     # Font
-    keymap.setFont("MS Gothic", 12)
+    keymap.setFont("HackGenNerd", 12)
 
     # Theme
     keymap.setTheme("black")
