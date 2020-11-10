@@ -72,3 +72,4 @@ def configure(keymap):
     keymap_slack["A-t"] = "A-S-Up"
     keymap_slack["A-j"] = "A-Down"
     keymap_slack["A-k"] = "A-Up"
+    keymap_slack["Enter"] = "C-Enter"
