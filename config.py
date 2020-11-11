@@ -58,6 +58,7 @@ def configure(keymap):
     keymap_global["W-n"] = keymap.ActivateWindowCommand(exe_name="emacs.exe")
     keymap_global["W-Minus"] = keymap.ActivateWindowCommand(exe_name="slack.exe")
     keymap_global["W-b"] = keymap.ActivateWindowCommand(exe_name="KeePassXC.exe")
+    keymap_global["W-m"] = keymap.ActivateWindowCommand(exe_name="thunderbird.exe")
 
     set_keymap_weblike(keymap, keymap.defineWindowKeymap(
         exe_name="firefox.exe", class_name="MozillaWindowClass"))
