@@ -1,11 +1,4 @@
-﻿import sys
-import os
-import datetime
-
-import pyauto
-from keyhac import *
-
-def set_keymap_weblike(keymap, keymap_window):
+﻿def set_keymap_weblike(keymap, keymap_window):
     keymap_window["C-y"] = "C-v"
     keymap_window["C-g"] = "Esc"
     keymap_window["C-Slash"] = "C-z"
@@ -35,6 +28,7 @@ def set_keymap_weblike(keymap, keymap_window):
     keymap_window["C-w"] = "C-x"
     keymap_window["A-w"] = "C-c"
 
+
 def configure(keymap):
     keymap.editor = "emacsclient.exe"
 
@@ -54,16 +48,24 @@ def configure(keymap):
     keymap_global["W-z"] = keymap.command_ClipboardList
 
     keymap_global["W-h"] = keymap.ActivateWindowCommand(exe_name="firefox.exe")
-    keymap_global["W-t"] = keymap.ActivateWindowCommand(exe_name="WindowsTerminal.exe")
+    keymap_global["W-t"] = keymap.ActivateWindowCommand(
+        exe_name="WindowsTerminal.exe")
     keymap_global["W-n"] = keymap.ActivateWindowCommand(exe_name="emacs.exe")
-    keymap_global["W-Minus"] = keymap.ActivateWindowCommand(exe_name="slack.exe")
-    keymap_global["W-b"] = keymap.ActivateWindowCommand(exe_name="KeePassXC.exe")
-    keymap_global["W-m"] = keymap.ActivateWindowCommand(exe_name="thunderbird.exe")
+    keymap_global["W-Minus"] = keymap.ActivateWindowCommand(
+        exe_name="slack.exe")
+    keymap_global["W-b"] = keymap.ActivateWindowCommand(
+        exe_name="KeePassXC.exe")
+    keymap_global["W-m"] = keymap.ActivateWindowCommand(
+        exe_name="thunderbird.exe")
 
-    set_keymap_weblike(keymap, keymap.defineWindowKeymap(
-        exe_name="firefox.exe", class_name="MozillaWindowClass"))
-    set_keymap_weblike(keymap, keymap.defineWindowKeymap(
-        exe_name="thunderbird.exe", class_name="MozillaWindowClass"))
+    set_keymap_weblike(
+        keymap,
+        keymap.defineWindowKeymap(exe_name="firefox.exe",
+                                  class_name="MozillaWindowClass"))
+    set_keymap_weblike(
+        keymap,
+        keymap.defineWindowKeymap(exe_name="thunderbird.exe",
+                                  class_name="MozillaWindowClass"))
 
     keymap_emacs = keymap.defineWindowKeymap(exe_name="emacs.exe")
     keymap_emacs["C-m"] = "Enter"
