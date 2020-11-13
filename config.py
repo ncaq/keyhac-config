@@ -57,6 +57,7 @@ def configure(keymap):
         exe_name="KeePassXC.exe")
     keymap_global["W-m"] = keymap.ActivateWindowCommand(
         exe_name="thunderbird.exe")
+    keymap_global["W-o"] = keymap.ActivateWindowCommand(exe_name="WINWORD.EXE")
 
     set_keymap_weblike(
         keymap,
@@ -77,3 +78,8 @@ def configure(keymap):
     keymap_slack["A-j"] = "A-Down"
     keymap_slack["A-k"] = "A-Up"
     keymap_slack["Enter"] = "C-Enter"
+
+    set_keymap_weblike(
+        keymap,
+        keymap.defineWindowKeymap(exe_name="WINWORD.EXE",
+                                  class_name="VbaWindow"))
