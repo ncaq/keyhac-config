@@ -44,6 +44,7 @@ def configure(keymap):
     # --------------------------------------------------------------------
 
     keymap_global = keymap.defineWindowKeymap()
+    keymap_global["W-Semicolon"] = "W-Up"
     keymap_global["W-q"] = "A-F4"
     keymap_global["W-z"] = keymap.command_ClipboardList
 
