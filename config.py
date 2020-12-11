@@ -16,6 +16,7 @@
     keymap_window["C-n"] = "Down"
     keymap_window["C-s"] = "Right"
     keymap_window["A-s"] = "C-Right"
+    keymap_window["A-Minus"] = "C-S-t"
 
     keymap_window["C-q"] = "C-w"
     keymap_window["C-k"] = ["S-End", "C-x"]
