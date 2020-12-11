@@ -74,10 +74,10 @@ def configure(keymap):
 
     keymap_slack = keymap.defineWindowKeymap(exe_name="slack.exe")
     set_keymap_weblike(keymap, keymap_slack)
-    keymap_slack["A-n"] = "A-S-Down"
-    keymap_slack["A-t"] = "A-S-Up"
-    keymap_slack["A-j"] = "A-Down"
-    keymap_slack["A-k"] = "A-Up"
+    keymap_slack["A-j"] = "A-S-Down"
+    keymap_slack["A-k"] = "A-S-Up"
+    keymap_slack["A-t"] = "A-Up"
+    keymap_slack["A-n"] = "A-Down"
     keymap_slack["Enter"] = "C-Enter"
 
     set_keymap_weblike(
