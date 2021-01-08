@@ -80,6 +80,8 @@ def configure(keymap):
     keymap_slack["A-t"] = "A-Up"
     keymap_slack["A-n"] = "A-Down"
     keymap_slack["Enter"] = "C-Enter"
+    keymap_slack["C-Comma"] = "29" # 無変換
+    keymap_slack["C-Period"] = "28" # 変換
 
     set_keymap_weblike(
         keymap,
