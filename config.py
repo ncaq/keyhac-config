@@ -30,6 +30,36 @@
     keymap_window["A-w"] = "C-c"
 
 
+def check_func_emacs(window) -> bool:
+    """
+    check_func of ActivateWindowCommand argument.
+    It is based on the Fakeymacs code `https://github.com/smzht/fakeymacs`
+    """
+    return window.getClassName() == "Emacs" or (
+        window.getProcessName()
+        in [
+            "mstsc.exe",  # WSLg
+            "msrdc.exe",  # WSLg
+            "XWin.exe",  # Cygwin/X
+            "XWin_MobaX.exe",  # MobaXterm/X
+            "XWin_MobaX_1.16.3.exe",  # MobaXterm/X
+            "XWin_Cygwin_1.14.5.exe",  # MobaXterm/X
+            "XWin_Cygwin_1.16.3.exe",  # MobaXterm/X
+            "Xming.exe",  # Xming
+            "vcxsrv.exe",  # VcXsrv
+            "GWSL_vcxsrv.exe",  # GWSL
+            "GWSL_vcxsrv_lowdpi.exe",  # GWSL
+            "X410.exe",  # X410
+            "Xpra-Launcher.exe",  # Xpra
+        ]
+        and
+        # ウィンドウのタイトルを検索する正規表現を指定する
+        # Emacs を起動しているウィンドウを検索できるように、
+        # Emacs の frame-title-format 変数を設定するなどして、識別できるようにする
+        window.getText().startswith("Emacs ")
+    )
+
+
 def configure(keymap):
     keymap.editor = "emacsclient.exe"
 
@@ -51,7 +81,7 @@ def configure(keymap):
 
     keymap_global["W-h"] = keymap.ActivateWindowCommand(exe_name="firefox.exe")
     keymap_global["W-t"] = keymap.ActivateWindowCommand(exe_name="WindowsTerminal.exe")
-    keymap_global["W-n"] = keymap.ActivateWindowCommand(exe_name="emacs.exe")
+    keymap_global["W-n"] = keymap.ActivateWindowCommand(check_func=check_func_emacs)
     keymap_global["W-Minus"] = keymap.ActivateWindowCommand(exe_name="slack.exe")
     keymap_global["W-b"] = keymap.ActivateWindowCommand(exe_name="KeePassXC.exe")
     keymap_global["W-m"] = keymap.ActivateWindowCommand(exe_name="thunderbird.exe")
