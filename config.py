@@ -63,7 +63,7 @@ def check_func_emacs(window) -> bool:
 def configure(keymap):
     keymap.clipboard_history.enableHook(False)
 
-    keymap.editor = "emacsclient.exe"
+    keymap.editor = "code"
 
     # --------------------------------------------------------------------
     # Customizing the display
