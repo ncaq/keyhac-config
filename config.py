@@ -37,7 +37,7 @@ def configure(keymap):
     # Customizing the display
 
     # Font
-    keymap.setFont("HackGenNerd", 12)
+    keymap.setFont("HackGenNerd Console", 12)
 
     # Theme
     keymap.setTheme("black")
