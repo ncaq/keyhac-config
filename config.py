@@ -50,24 +50,24 @@ def configure(keymap):
     keymap_global["W-z"] = keymap.command_ClipboardList
 
     keymap_global["W-h"] = keymap.ActivateWindowCommand(exe_name="firefox.exe")
-    keymap_global["W-t"] = keymap.ActivateWindowCommand(
-        exe_name="WindowsTerminal.exe")
+    keymap_global["W-t"] = keymap.ActivateWindowCommand(exe_name="WindowsTerminal.exe")
     keymap_global["W-n"] = keymap.ActivateWindowCommand(exe_name="emacs.exe")
-    keymap_global["W-Minus"] = keymap.ActivateWindowCommand(
-        exe_name="slack.exe")
-    keymap_global["W-b"] = keymap.ActivateWindowCommand(
-        exe_name="KeePassXC.exe")
-    keymap_global["W-m"] = keymap.ActivateWindowCommand(
-        exe_name="thunderbird.exe")
+    keymap_global["W-Minus"] = keymap.ActivateWindowCommand(exe_name="slack.exe")
+    keymap_global["W-b"] = keymap.ActivateWindowCommand(exe_name="KeePassXC.exe")
+    keymap_global["W-m"] = keymap.ActivateWindowCommand(exe_name="thunderbird.exe")
 
     set_keymap_weblike(
         keymap,
-        keymap.defineWindowKeymap(exe_name="firefox.exe",
-                                  class_name="MozillaWindowClass"))
+        keymap.defineWindowKeymap(
+            exe_name="firefox.exe", class_name="MozillaWindowClass"
+        ),
+    )
     set_keymap_weblike(
         keymap,
-        keymap.defineWindowKeymap(exe_name="thunderbird.exe",
-                                  class_name="MozillaWindowClass"))
+        keymap.defineWindowKeymap(
+            exe_name="thunderbird.exe", class_name="MozillaWindowClass"
+        ),
+    )
 
     keymap_emacs = keymap.defineWindowKeymap(exe_name="emacs.exe")
     keymap_emacs["C-m"] = "Enter"
@@ -79,5 +79,5 @@ def configure(keymap):
     keymap_slack["A-t"] = "A-Up"
     keymap_slack["A-n"] = "A-Down"
     keymap_slack["Enter"] = "C-Enter"
-    keymap_slack["C-Comma"] = "29" # 無変換
-    keymap_slack["C-Period"] = "28" # 変換
+    keymap_slack["C-Comma"] = "29"  # 無変換
+    keymap_slack["C-Period"] = "28"  # 変換
