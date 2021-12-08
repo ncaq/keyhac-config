@@ -56,7 +56,7 @@ def check_func_emacs(window) -> bool:
         # ウィンドウのタイトルを検索する正規表現を指定する
         # Emacs を起動しているウィンドウを検索できるように、
         # Emacs の frame-title-format 変数を設定するなどして、識別できるようにする
-        window.getText().startswith("Emacs ")
+        window.getText().startswith("emacs ")
     )
 
 
