@@ -112,6 +112,12 @@ def configure(keymap) -> None:
     keymap_emacs = keymap.defineWindowKeymap(exe_name="emacs.exe")
     keymap_emacs["C-m"] = "Enter"
 
+    set_keymap_weblike(keymap,keymap.defineWindowKeymap(exe_name="chrome.exe"))
+
+    keymap_mikutter = keymap.defineWindowKeymap(check_func=check_func_mikutter)
+    set_keymap_weblike(keymap,keymap_mikutter)
+    keymap_mikutter["C-m"] = "S-Enter"
+
     keymap_slack = keymap.defineWindowKeymap(exe_name="slack.exe")
     set_keymap_weblike(keymap, keymap_slack)
     keymap_slack["A-j"] = "A-S-Down"
