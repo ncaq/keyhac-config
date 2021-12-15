@@ -64,6 +64,9 @@ def check_func_emacs(window) -> bool:
         window.getText().startswith("emacs ")
     )
 
+def check_func_mikutter(window) -> bool:
+    """WSLのmikutterを検出します。Windowsネイティブでmikutterを動かせたことがないのでネイティブには対応していません。"""
+    return window.getProcessName() in process_name_of_x11_server and window.getText() == "mikutter"
 
 def configure(keymap) -> None:
     keymap.clipboard_history.enableHook(False)
@@ -88,6 +91,7 @@ def configure(keymap) -> None:
     keymap_global["W-h"] = keymap.ActivateWindowCommand(exe_name="firefox.exe")
     keymap_global["W-t"] = keymap.ActivateWindowCommand(exe_name="WindowsTerminal.exe")
     keymap_global["W-n"] = keymap.ActivateWindowCommand(check_func=check_func_emacs)
+    keymap_global["W-s"] = keymap.ActivateWindowCommand(check_func=check_func_mikutter)
     keymap_global["W-Minus"] = keymap.ActivateWindowCommand(exe_name="slack.exe")
     keymap_global["W-b"] = keymap.ActivateWindowCommand(exe_name="KeePassXC.exe")
     keymap_global["W-m"] = keymap.ActivateWindowCommand(exe_name="thunderbird.exe")
