@@ -64,9 +64,14 @@ def check_func_emacs(window) -> bool:
         window.getText().startswith("emacs ")
     )
 
+
 def check_func_mikutter(window) -> bool:
     """WSLのmikutterを検出します。Windowsネイティブでmikutterを動かせたことがないのでネイティブには対応していません。"""
-    return window.getProcessName() in process_name_of_x11_server and window.getText() == "mikutter"
+    return (
+        window.getProcessName() in process_name_of_x11_server
+        and window.getText() == "mikutter"
+    )
+
 
 def configure(keymap) -> None:
     keymap.clipboard_history.enableHook(False)
@@ -112,10 +117,10 @@ def configure(keymap) -> None:
     keymap_emacs = keymap.defineWindowKeymap(exe_name="emacs.exe")
     keymap_emacs["C-m"] = "Enter"
 
-    set_keymap_weblike(keymap,keymap.defineWindowKeymap(exe_name="chrome.exe"))
+    set_keymap_weblike(keymap, keymap.defineWindowKeymap(exe_name="chrome.exe"))
 
     keymap_mikutter = keymap.defineWindowKeymap(check_func=check_func_mikutter)
-    set_keymap_weblike(keymap,keymap_mikutter)
+    set_keymap_weblike(keymap, keymap_mikutter)
     keymap_mikutter["C-m"] = "S-Enter"
 
     keymap_slack = keymap.defineWindowKeymap(exe_name="slack.exe")
