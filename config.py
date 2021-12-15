@@ -1,4 +1,7 @@
-﻿def set_keymap_weblike(keymap, keymap_window):
+﻿from typing import List
+
+
+def set_keymap_weblike(keymap, keymap_window) -> None:
     keymap_window["C-y"] = "C-v"
     keymap_window["C-g"] = "Esc"
     keymap_window["C-Slash"] = "C-z"
@@ -30,28 +33,30 @@
     keymap_window["A-w"] = "C-c"
 
 
+process_name_of_x11_server: List[str] = [
+    "mstsc.exe",  # WSLg
+    "msrdc.exe",  # WSLg
+    "XWin.exe",  # Cygwin/X
+    "XWin_MobaX.exe",  # MobaXterm/X
+    "XWin_MobaX_1.16.3.exe",  # MobaXterm/X
+    "XWin_Cygwin_1.14.5.exe",  # MobaXterm/X
+    "XWin_Cygwin_1.16.3.exe",  # MobaXterm/X
+    "Xming.exe",  # Xming
+    "vcxsrv.exe",  # VcXsrv
+    "GWSL_vcxsrv.exe",  # GWSL
+    "GWSL_vcxsrv_lowdpi.exe",  # GWSL
+    "X410.exe",  # X410
+    "Xpra-Launcher.exe",  # Xpra
+]
+
+
 def check_func_emacs(window) -> bool:
     """
     check_func of ActivateWindowCommand argument.
     It is based on the Fakeymacs code `https://github.com/smzht/fakeymacs`
     """
     return window.getClassName() == "Emacs" or (
-        window.getProcessName()
-        in [
-            "mstsc.exe",  # WSLg
-            "msrdc.exe",  # WSLg
-            "XWin.exe",  # Cygwin/X
-            "XWin_MobaX.exe",  # MobaXterm/X
-            "XWin_MobaX_1.16.3.exe",  # MobaXterm/X
-            "XWin_Cygwin_1.14.5.exe",  # MobaXterm/X
-            "XWin_Cygwin_1.16.3.exe",  # MobaXterm/X
-            "Xming.exe",  # Xming
-            "vcxsrv.exe",  # VcXsrv
-            "GWSL_vcxsrv.exe",  # GWSL
-            "GWSL_vcxsrv_lowdpi.exe",  # GWSL
-            "X410.exe",  # X410
-            "Xpra-Launcher.exe",  # Xpra
-        ]
+        window.getProcessName() in process_name_of_x11_server
         and
         # ウィンドウのタイトルを検索する正規表現を指定する
         # Emacs を起動しているウィンドウを検索できるように、
@@ -60,7 +65,7 @@ def check_func_emacs(window) -> bool:
     )
 
 
-def configure(keymap):
+def configure(keymap) -> None:
     keymap.clipboard_history.enableHook(False)
 
     keymap.editor = "code"
