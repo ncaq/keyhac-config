@@ -100,6 +100,7 @@ def configure(keymap) -> None:
     keymap_global["W-Minus"] = keymap.ActivateWindowCommand(exe_name="slack.exe")
     keymap_global["W-b"] = keymap.ActivateWindowCommand(exe_name="KeePassXC.exe")
     keymap_global["W-m"] = keymap.ActivateWindowCommand(exe_name="thunderbird.exe")
+    keymap_global["W-z"] = keymap.ActivateWindowCommand(exe_name="Amazon Music.exe")
 
     set_keymap_weblike(
         keymap,
