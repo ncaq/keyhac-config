@@ -133,3 +133,5 @@ def configure(keymap) -> None:
     keymap_slack["Enter"] = "C-Enter"
     keymap_slack["C-Comma"] = "29"  # 無変換
     keymap_slack["C-Period"] = "28"  # 変換
+
+    set_keymap_weblike(keymap, keymap.defineWindowKeymap(exe_name="Amazon Music.exe"))
