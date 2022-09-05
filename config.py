@@ -1,4 +1,25 @@
 ﻿from typing import List
+import sys
+from enum import Enum
+
+
+class Platform(Enum):
+    """The platform for support of Keyhac."""
+
+    WINDOWS = "windows"
+    MAC = "mac"
+
+
+def detect_platform_of_keyhac() -> Platform:
+    if sys.platform == "win32":
+        return Platform.WINDOWS
+    elif sys.platform == "darwin":
+        return Platform.MAC
+
+    raise ValueError(sys.platform)
+
+
+current_platform = detect_platform_of_keyhac()
 
 
 def set_keymap_weblike(keymap, keymap_window) -> None:
