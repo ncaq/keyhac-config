@@ -82,7 +82,7 @@ def configure(keymap) -> None:
     # Customizing the display
 
     # Font
-    keymap.setFont("HackGenNerd Console", 12)
+    keymap.setFont("HackGen Console NFJ", 12)
 
     # Theme
     keymap.setTheme("black")
