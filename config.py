@@ -20,6 +20,46 @@ def detect_platform_of_keyhac() -> Platform:
 
 current_platform = detect_platform_of_keyhac()
 
+# 文字のリテラル表現と、Keyhacの特殊なキー表現の対応リスト。
+keyhac_literal_special_source = [
+    ("[", "OpenBlacket"),
+    ("]", "CloseBlacket"),
+    ("\\", "BackSlash"),
+    ("`", "BackQuote"),
+    ("'", "Quote"),
+    (",", "Comma"),
+    (".", "Period"),
+    ("/", "Slash"),
+    ("-", "Minus"),
+    (";", "Semicolon"),
+]
+
+# リテラル表現をKeyhacの表現に変換する。
+def keyhac_literal_special(literal: str):
+    return next((t[1] for t in keyhac_literal_special_source if t[0] == literal), None)
+
+
+# Keyhacの表現をリテラル表現に変換する。
+def keyhac_special_literal(special: str):
+    return next((t[0] for t in keyhac_literal_special_source if t[1] == special), None)
+
+
+# USキーボードでDvorakとQwertyで差分が生じそうなリスト。
+# リテラル表現。
+dvorak = "[]\\`',.pyfgcrl/=aoeuidhtns-;qjkxbmwvz"
+qwerty = "-=\\`qwertyuiop[]asdfghjkl;'zxcvbnm,./"
+
+
+def d2q(key: str) -> str:
+    """
+    Dvorak to Qwerty.
+    Mac版KeyhacがDvorakキーボードモードでもQwertyで読み取ってしまうため、変換関数が必要。
+    """
+    literal = keyhac_special_literal(key) or key
+    i = dvorak.index(literal)
+    q = qwerty[i]
+    return keyhac_literal_special(q) or q
+
 
 def set_keymap_weblike(keymap, keymap_window) -> None:
     keymap_window["C-y"] = "C-v"
@@ -92,6 +132,7 @@ def check_func_mikutter(window) -> bool:
         and window.getText() == "mikutter"
     )
 
+
 def configure_windows(keymap) -> None:
     keymap.clipboard_history.enableHook(False)
 
@@ -142,8 +183,16 @@ def configure_windows(keymap) -> None:
 
     set_keymap_weblike(keymap, keymap.defineWindowKeymap(exe_name="Amazon Music.exe"))
 
+
 def configure_mac(keymap) -> None:
-    pass
+    keymap_global = keymap.defineWindowKeymap()
+
+    # グローバルな範囲でかな漢字変換のキーバインドを設定してしまう。
+    # MacではゲームしないのでSlackだけでなくグローバルでやっても気にならない。
+    # またEmacsなどでキャプチャ出来ないのでグローバルで行う必要がある。
+    keymap_global["Ctrl-" + d2q("Comma")] = "102"  # 英数
+    keymap_global["Ctrl-" + d2q("Period")] = "104"  # かな
+
 
 def configure(keymap) -> None:
     keymap.editor = "code"
