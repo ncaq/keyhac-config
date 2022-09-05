@@ -1,5 +1,4 @@
-﻿from typing import List
-import sys
+﻿import sys
 from enum import Enum
 
 
@@ -54,7 +53,7 @@ def set_keymap_weblike(keymap, keymap_window) -> None:
     keymap_window["A-w"] = "C-c"
 
 
-process_name_of_x11_server: List[str] = [
+process_name_of_x11_server = [
     "mstsc.exe",  # WSLg
     "msrdc.exe",  # WSLg
     "XWin.exe",  # Cygwin/X
@@ -93,22 +92,8 @@ def check_func_mikutter(window) -> bool:
         and window.getText() == "mikutter"
     )
 
-
-def configure(keymap) -> None:
+def configure_windows(keymap) -> None:
     keymap.clipboard_history.enableHook(False)
-
-    keymap.editor = "code"
-
-    # --------------------------------------------------------------------
-    # Customizing the display
-
-    # Font
-    keymap.setFont("HackGen Console NFJ", 12)
-
-    # Theme
-    keymap.setTheme("black")
-
-    # --------------------------------------------------------------------
 
     keymap_global = keymap.defineWindowKeymap()
     keymap_global["W-Semicolon"] = "W-Up"
@@ -156,3 +141,16 @@ def configure(keymap) -> None:
     keymap_slack["C-Period"] = "28"  # 変換
 
     set_keymap_weblike(keymap, keymap.defineWindowKeymap(exe_name="Amazon Music.exe"))
+
+def configure_mac(keymap) -> None:
+    pass
+
+def configure(keymap) -> None:
+    keymap.editor = "code"
+    keymap.setFont("HackGen Console NFJ", 12)
+    keymap.setTheme("black")
+
+    if current_platform == Platform.WINDOWS:
+        configure_windows(keymap)
+    elif current_platform == Platform.MAC:
+        configure_mac(keymap)
