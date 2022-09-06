@@ -34,13 +34,14 @@ keyhac_literal_special_source = [
     (";", "Semicolon"),
 ]
 
-# リテラル表現をKeyhacの表現に変換する。
+
 def keyhac_literal_special(literal: str):
+    """リテラル表現をKeyhacの表現に変換する。"""
     return next((t[1] for t in keyhac_literal_special_source if t[0] == literal), None)
 
 
-# Keyhacの表現をリテラル表現に変換する。
 def keyhac_special_literal(special: str):
+    """Keyhacの表現をリテラル表現に変換する。"""
     return next((t[0] for t in keyhac_literal_special_source if t[1] == special), None)
 
 
