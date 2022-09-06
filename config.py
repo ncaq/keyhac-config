@@ -195,8 +195,6 @@ def configure_mac(keymap) -> None:
 
 
 def configure(keymap) -> None:
-    keymap.editor = "code"
-    keymap.setFont("HackGen Console NFJ", 12)
     keymap.setTheme("black")
 
     if current_platform == Platform.WINDOWS:
