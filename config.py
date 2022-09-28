@@ -84,7 +84,7 @@ def set_keymap_weblike(keymap, keymap_window) -> None:
 
     keymap_window["C-q"] = "C-w"
     keymap_window["C-k"] = ["S-End", "C-x"]
-    keymap_window["C-x"] = keymap.defineMultiStrokeKeymap("C-X")
+    keymap_window["C-x"] = keymap.defineMultiStrokeKeymap("C-x")
     keymap_window["C-x"]["C-g"] = "Esc"
     keymap_window["C-x"]["C-h"] = "C-a"
     keymap_window["C-b"] = "Back"
