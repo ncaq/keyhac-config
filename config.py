@@ -130,7 +130,8 @@ def check_func_mikutter(window) -> bool:
     """WSLのmikutterを検出します。Windowsネイティブでmikutterを動かせたことがないのでネイティブには対応していません。"""
     return (
         window.getProcessName() in process_name_of_x11_server
-        and window.getText() == "mikutter"
+        # `mikutter`や`mikutter (Ubuntu)`が存在する。
+        and window.getText().startswith("mikutter")
     )
 
 
