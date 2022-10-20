@@ -1,4 +1,5 @@
 ﻿import sys
+import itertools
 from enum import Enum
 
 
@@ -22,8 +23,8 @@ current_platform = detect_platform_of_keyhac()
 
 # 文字のリテラル表現と、Keyhacの特殊なキー表現の対応リスト。
 keyhac_literal_special_source = [
-    ("[", "OpenBlacket"),
-    ("]", "CloseBlacket"),
+    ("[", "OpenBracket"),
+    ("]", "CloseBracket"),
     ("\\", "BackSlash"),
     ("`", "BackQuote"),
     ("'", "Quote"),
@@ -31,6 +32,7 @@ keyhac_literal_special_source = [
     (".", "Period"),
     ("/", "Slash"),
     ("-", "Minus"),
+    ("+", "Plus"),
     (";", "Semicolon"),
 ]
 
@@ -47,19 +49,97 @@ def keyhac_special_literal(special: str):
 
 # USキーボードでDvorakとQwertyで差分が生じそうなリスト。
 # リテラル表現。
-dvorak = "[]\\`',.pyfgcrl/=aoeuidhtns-;qjkxbmwvz"
-qwerty = "-=\\`qwertyuiop[]asdfghjkl;'zxcvbnm,./"
+# Dvorak的には=と+は=をプレーンとするが、Keyhac的には+がプレーン。
+dvorak = "[]\\`',.pyfgcrl/+aoeuidhtns-;qjkxbmwvz"
+qwerty = "-+\\`qwertyuiop[]asdfghjkl;'zxcvbnm,./"
 
 
 def d2q(key: str) -> str:
     """
     Dvorak to Qwerty.
-    Mac版KeyhacがDvorakキーボードモードでもQwertyで読み取ってしまうため、変換関数が必要。
     """
     literal = keyhac_special_literal(key) or key
-    i = dvorak.index(literal)
-    q = qwerty[i]
-    return keyhac_literal_special(q) or q
+    try:
+        fi = dvorak.index(literal)
+        to = qwerty[fi]
+        return keyhac_literal_special(to) or to
+    except ValueError:
+        return key
+
+
+def q2d(key: str) -> str:
+    """
+    Qwerty to Dvorak.
+    """
+    literal = keyhac_special_literal(key) or key
+    try:
+        fi = qwerty.index(literal)
+        to = dvorak[fi]
+        return keyhac_literal_special(to) or to
+    except ValueError:
+        return key
+
+
+process_name_of_linux = [
+    "mstsc.exe",  # WSLg
+    "msrdc.exe",  # WSLg
+    "XWin.exe",  # Cygwin/X
+    "XWin_MobaX.exe",  # MobaXterm/X
+    "XWin_MobaX_1.16.3.exe",  # MobaXterm/X
+    "XWin_Cygwin_1.14.5.exe",  # MobaXterm/X
+    "XWin_Cygwin_1.16.3.exe",  # MobaXterm/X
+    "Xming.exe",  # Xming
+    "vcxsrv.exe",  # VcXsrv
+    "GWSL_vcxsrv.exe",  # GWSL
+    "GWSL_vcxsrv_lowdpi.exe",  # GWSL
+    "X410.exe",  # X410
+    "Xpra-Launcher.exe",  # Xpra
+]
+
+
+def check_func_linux(window) -> bool:
+    """WSLのプロセスらしいものを検出します。"""
+    return window.getProcessName() in process_name_of_linux
+
+
+def check_func_emacs(window) -> bool:
+    """
+    check_func of ActivateWindowCommand argument.
+    It is based on the Fakeymacs code `https://github.com/smzht/fakeymacs`
+    """
+    return window.getClassName() == "Emacs" or (
+        window.getProcessName() in process_name_of_linux
+        and
+        # ウィンドウのタイトルを検索する正規表現を指定する
+        # Emacs を起動しているウィンドウを検索できるように、
+        # Emacs の frame-title-format 変数を設定するなどして、識別できるようにする
+        window.getText().startswith("emacs ")
+    )
+
+
+def check_func_mikutter(window) -> bool:
+    """WSLのmikutterを検出します。Windowsネイティブでmikutterを動かせたことがないのでネイティブには対応していません。"""
+    return (
+        window.getProcessName() in process_name_of_linux
+        # `mikutter`や`mikutter (Ubuntu)`が存在する。
+        and window.getText().startswith("mikutter")
+    )
+
+
+def set_keymap_dvorak_for_linux(_, keymap_window) -> None:
+    """WSLg向けに全てDvorakに変換する。"""
+    for key in dvorak:
+        f = keyhac_literal_special(key) or key
+        t = q2d(key)
+        keymap_window[f] = t
+        prefixs = ["S", "C", "A"]
+        # "C-M-a"みたいなprefix全て合成する。
+        for p in [
+            "-".join(c)
+            for n in range(1, len(prefixs) + 1)
+            for c in itertools.combinations(prefixs, n)
+        ]:
+            keymap_window[p + "-" + f] = p + "-" + t
 
 
 def set_keymap_weblike(keymap, keymap_window) -> None:
@@ -94,47 +174,6 @@ def set_keymap_weblike(keymap, keymap_window) -> None:
     keymap_window["A-w"] = "C-c"
 
 
-process_name_of_x11_server = [
-    "mstsc.exe",  # WSLg
-    "msrdc.exe",  # WSLg
-    "XWin.exe",  # Cygwin/X
-    "XWin_MobaX.exe",  # MobaXterm/X
-    "XWin_MobaX_1.16.3.exe",  # MobaXterm/X
-    "XWin_Cygwin_1.14.5.exe",  # MobaXterm/X
-    "XWin_Cygwin_1.16.3.exe",  # MobaXterm/X
-    "Xming.exe",  # Xming
-    "vcxsrv.exe",  # VcXsrv
-    "GWSL_vcxsrv.exe",  # GWSL
-    "GWSL_vcxsrv_lowdpi.exe",  # GWSL
-    "X410.exe",  # X410
-    "Xpra-Launcher.exe",  # Xpra
-]
-
-
-def check_func_emacs(window) -> bool:
-    """
-    check_func of ActivateWindowCommand argument.
-    It is based on the Fakeymacs code `https://github.com/smzht/fakeymacs`
-    """
-    return window.getClassName() == "Emacs" or (
-        window.getProcessName() in process_name_of_x11_server
-        and
-        # ウィンドウのタイトルを検索する正規表現を指定する
-        # Emacs を起動しているウィンドウを検索できるように、
-        # Emacs の frame-title-format 変数を設定するなどして、識別できるようにする
-        window.getText().startswith("emacs ")
-    )
-
-
-def check_func_mikutter(window) -> bool:
-    """WSLのmikutterを検出します。Windowsネイティブでmikutterを動かせたことがないのでネイティブには対応していません。"""
-    return (
-        window.getProcessName() in process_name_of_x11_server
-        # `mikutter`や`mikutter (Ubuntu)`が存在する。
-        and window.getText().startswith("mikutter")
-    )
-
-
 def configure_windows(keymap) -> None:
     keymap.clipboard_history.enableHook(False)
 
@@ -150,6 +189,9 @@ def configure_windows(keymap) -> None:
     keymap_global["W-b"] = keymap.ActivateWindowCommand(exe_name="KeePassXC.exe")
     keymap_global["W-m"] = keymap.ActivateWindowCommand(exe_name="thunderbird.exe")
     keymap_global["W-z"] = keymap.ActivateWindowCommand(exe_name="Amazon Music.exe")
+
+    keymap_linux = keymap.defineWindowKeymap(check_func=check_func_linux)
+    set_keymap_dvorak_for_linux(keymap, keymap_linux)
 
     set_keymap_weblike(
         keymap,
