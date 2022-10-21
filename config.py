@@ -128,17 +128,16 @@ def check_func_mikutter(window) -> bool:
 
 def set_keymap_dvorak_for_linux(_, keymap_window) -> None:
     """WSLg向けに全てDvorakに変換する。"""
+    # "C-M-a"みたいなprefixを全て合成する。
+    modifiers = ["S", "C", "A"]
+    prefixs = ["-".join(c) for n in range(1, len(modifiers) + 1) for c in itertools.combinations(modifiers, n)]
     for key in dvorak:
         f = keyhac_literal_special(key) or key
         t = q2d(key)
+        # 単発のキー入力を変換する。
         keymap_window[f] = t
-        prefixs = ["S", "C", "A"]
-        # "C-M-a"みたいなprefix全て合成する。
-        for p in [
-            "-".join(c)
-            for n in range(1, len(prefixs) + 1)
-            for c in itertools.combinations(prefixs, n)
-        ]:
+        # prefix付きのキー入力を変換する。
+        for p in prefixs:
             keymap_window[p + "-" + f] = p + "-" + t
 
 
