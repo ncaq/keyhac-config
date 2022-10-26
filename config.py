@@ -130,7 +130,11 @@ def set_keymap_dvorak_for_linux(_, keymap_window) -> None:
     """WSLg向けに全てDvorakに変換する。"""
     # "C-M-a"みたいなprefixを全て合成する。
     modifiers = ["S", "C", "A"]
-    prefixs = ["-".join(c) for n in range(1, len(modifiers) + 1) for c in itertools.combinations(modifiers, n)]
+    prefixs = [
+        "-".join(c)
+        for n in range(1, len(modifiers) + 1)
+        for c in itertools.combinations(modifiers, n)
+    ]
     for key in dvorak:
         f = keyhac_literal_special(key) or key
         t = q2d(key)
