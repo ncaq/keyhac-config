@@ -154,7 +154,7 @@ def set_keymap_weblike(keymap, keymap_window) -> None:
     keymap_window["C-o"] = "C-t"
     keymap_window["A-o"] = "C-S-t"
     keymap_window["C-e"] = "End"
-    keymap_window["C-u"] = ["Home", "S-End", "C-x"]
+    keymap_window["C-u"] = ["Home", "S-End", "C-x", "Delete"]
 
     keymap_window["C-d"] = "Delete"
     keymap_window["C-h"] = "Left"
