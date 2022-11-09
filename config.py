@@ -145,16 +145,24 @@ def set_keymap_dvorak_for_linux(_, keymap_window) -> None:
             keymap_window[p + "-" + f] = p + "-" + t
 
 
-def set_keymap_weblike(keymap, keymap_window) -> None:
-    keymap_window["C-y"] = "C-v"
+def set_keymap_weblike(keymap, keymap_window, for_linux=False) -> None:
+    # Linux(WSLg)はDvorak設定を内部で行わないためキーを変換する必要がある。
+    # 内部Windowsではそうではないため変換関数を分岐する。
+    if for_linux:
+        t = q2d
+    else:
+        # Pythonにはビルドインの恒等関数は無いのかな?
+        t = lambda x: x
+
+    keymap_window["C-y"] = "C-" + t("v")
     keymap_window["C-g"] = "Esc"
-    keymap_window["C-Slash"] = "C-z"
+    keymap_window["C-Slash"] = "C-" + t("z")
 
     keymap_window["C-a"] = "Home"
-    keymap_window["C-o"] = "C-t"
-    keymap_window["A-o"] = "C-S-t"
+    keymap_window["C-o"] = "C-" + t("t")
+    keymap_window["A-o"] = "C-S-" + t("t")
     keymap_window["C-e"] = "End"
-    keymap_window["C-u"] = ["Home", "S-End", "C-x", "Delete"]
+    keymap_window["C-u"] = ["Home", "S-End", "C-" + t("x"), "Delete"]
 
     keymap_window["C-d"] = "Delete"
     keymap_window["C-h"] = "Left"
@@ -163,18 +171,18 @@ def set_keymap_weblike(keymap, keymap_window) -> None:
     keymap_window["C-n"] = "Down"
     keymap_window["C-s"] = "Right"
     keymap_window["A-s"] = "C-Right"
-    keymap_window["A-Minus"] = "C-S-t"
+    keymap_window["A-Minus"] = "C-S-" + t("t")
 
-    keymap_window["C-q"] = "C-w"
-    keymap_window["C-k"] = ["S-End", "C-x"]
-    keymap_window["C-x"] = keymap.defineMultiStrokeKeymap("C-x")
+    keymap_window["C-q"] = "C-" + t("w")
+    keymap_window["C-k"] = ["S-End", "C-" + t("x")]
+    keymap_window["C-x"] = keymap.defineMultiStrokeKeymap("C-" + t("x"))
     keymap_window["C-x"]["C-g"] = "Esc"
-    keymap_window["C-x"]["C-h"] = "C-a"
+    keymap_window["C-x"]["C-h"] = "C-" + t("a")
     keymap_window["C-b"] = "Back"
     keymap_window["A-b"] = "C-Back"
     keymap_window["C-m"] = "Enter"
-    keymap_window["C-w"] = "C-x"
-    keymap_window["A-w"] = "C-c"
+    keymap_window["C-w"] = "C-" + t("x")
+    keymap_window["A-w"] = "C-" + t("c")
 
 
 def configure_windows(keymap) -> None:
@@ -209,13 +217,14 @@ def configure_windows(keymap) -> None:
         ),
     )
 
+    # WindowsネイティブのEmacsのみを探索する。
     keymap_emacs = keymap.defineWindowKeymap(exe_name="emacs.exe")
     keymap_emacs["C-m"] = "Enter"
 
     set_keymap_weblike(keymap, keymap.defineWindowKeymap(exe_name="chrome.exe"))
 
     keymap_mikutter = keymap.defineWindowKeymap(check_func=check_func_mikutter)
-    set_keymap_weblike(keymap, keymap_mikutter)
+    set_keymap_weblike(keymap, keymap_mikutter, True)
     keymap_mikutter["C-m"] = "S-Enter"
 
     keymap_slack = keymap.defineWindowKeymap(exe_name="slack.exe")
