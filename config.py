@@ -1,6 +1,8 @@
-﻿import sys
+﻿from enum import Enum
+from pathlib import WindowsPath
+from typing import Any, Callable, Optional
 import itertools
-from enum import Enum
+import sys
 
 
 class Platform(Enum):
@@ -185,6 +187,48 @@ def set_keymap_weblike(keymap, keymap_window, for_linux=False) -> None:
     keymap_window["A-w"] = "C-" + t("c")
 
 
+def run_or_raise(
+    keymap: Any,
+    exe_name: Optional[str] = None,
+    class_name: Optional[str] = None,
+    window_text: Optional[str] = None,
+    check_func: Optional[Callable[[Any], bool]] = None,
+    force: bool = False,
+    command: Optional[str] = None,
+    param: Optional[str] = None,
+) -> Callable[[], Any]:
+    """
+    XMonadの
+    [runOrRaise](https://hackage.haskell.org/package/xmonad-contrib-0.17.1/docs/XMonad-Actions-WindowGo.html#v:runOrRaise)
+    をKeyhacに移植する。
+    既にプロセスやウィンドウが存在すればそれにフォーカスして、
+    存在しなければ起動する。
+    Keyhacの型情報を適切に参照するのが難しいため型定義に`Any`がしばしば入る。
+    """
+
+    def inner() -> Any:
+        """機能を提供する関数を返す必要があるので内部で関数を生成する。"""
+        isActive = keymap.ActivateWindowCommand(
+            exe_name, class_name, window_text, check_func, force
+        )()
+        if isActive != None:
+            # ウィンドウが見つかった場合一応その値を返す。
+            return isActive
+        else:
+            # ウインドウが見つからなかった場合、起動する。
+            com = command or exe_name
+            if com == None:
+                raise ValueError(f"command: {command}, exe_name: {exe_name}")
+            keymap.ShellExecuteCommand(None, com, param, "", swmode="maximized")()
+            return isActive
+
+    return inner
+
+
+def program_files(*pathsegments: str) -> WindowsPath:
+    return WindowsPath("C:", "Program Files", *pathsegments)
+
+
 def configure_windows(keymap) -> None:
     keymap.clipboard_history.enableHook(False)
 
@@ -192,14 +236,42 @@ def configure_windows(keymap) -> None:
     keymap_global["W-Semicolon"] = "W-Up"
     keymap_global["W-q"] = "A-F4"
 
-    keymap_global["W-h"] = keymap.ActivateWindowCommand(exe_name="firefox.exe")
-    keymap_global["W-t"] = keymap.ActivateWindowCommand(exe_name="WindowsTerminal.exe")
-    keymap_global["W-n"] = keymap.ActivateWindowCommand(check_func=check_func_emacs)
-    keymap_global["W-s"] = keymap.ActivateWindowCommand(check_func=check_func_mikutter)
-    keymap_global["W-Minus"] = keymap.ActivateWindowCommand(exe_name="slack.exe")
-    keymap_global["W-b"] = keymap.ActivateWindowCommand(exe_name="KeePassXC.exe")
-    keymap_global["W-m"] = keymap.ActivateWindowCommand(exe_name="thunderbird.exe")
-    keymap_global["W-z"] = keymap.ActivateWindowCommand(exe_name="Amazon Music.exe")
+    keymap_global["W-h"] = run_or_raise(
+        keymap,
+        exe_name="firefox.exe",
+        command=str(program_files("Mozilla Firefox", "firefox.exe")),
+    )
+    keymap_global["W-t"] = run_or_raise(
+        keymap, exe_name="WindowsTerminal.exe", command="wt.exe"
+    )
+    keymap_global["W-n"] = run_or_raise(
+        keymap,
+        check_func=check_func_emacs,
+        command="wslg.exe",
+        param="--cd ~ -d Ubuntu -- emacs",
+    )
+    keymap_global["W-s"] = run_or_raise(
+        keymap,
+        check_func=check_func_mikutter,
+        command="wslg.exe",
+        param="--cd ~ -d Ubuntu -- ~/.local/bin/mikutter",
+    )
+    keymap_global["W-Minus"] = run_or_raise(keymap, exe_name="slack.exe")
+    keymap_global["W-b"] = run_or_raise(
+        keymap,
+        exe_name="KeePassXC.exe",
+        command=str(program_files("KeePassXC", "KeePassXC.exe")),
+    )
+    keymap_global["W-m"] = run_or_raise(
+        keymap,
+        exe_name="thunderbird.exe",
+        command=str(program_files("Mozilla Thunderbird", "thunderbird.exe")),
+    )
+    keymap_global["W-z"] = run_or_raise(
+        keymap,
+        exe_name="Amazon Music.exe",
+        command=r"shell:appsFolder\AmazonMobileLLC.AmazonMusic_kc6t79cpj4tp0!AmazonMobileLLC.AmazonMusic",
+    )
 
     keymap_linux = keymap.defineWindowKeymap(check_func=check_func_linux)
     set_keymap_dvorak_for_linux(keymap, keymap_linux)
