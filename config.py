@@ -273,8 +273,9 @@ def configure_windows(keymap) -> None:
         command=r"shell:appsFolder\AmazonMobileLLC.AmazonMusic_kc6t79cpj4tp0!AmazonMobileLLC.AmazonMusic",
     )
 
-    keymap_linux = keymap.defineWindowKeymap(check_func=check_func_linux)
-    set_keymap_dvorak_for_linux(keymap, keymap_linux)
+    set_keymap_dvorak_for_linux(
+        keymap, keymap.defineWindowKeymap(check_func=check_func_linux)
+    )
 
     set_keymap_weblike(
         keymap,
