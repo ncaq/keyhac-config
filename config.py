@@ -1,8 +1,8 @@
-﻿from enum import Enum
-from pathlib import WindowsPath
-from typing import Any, Callable, Optional
-import itertools
+﻿import itertools
 import sys
+from enum import Enum
+from pathlib import WindowsPath
+from typing import Any, Callable, List, Optional, Tuple
 
 
 class Platform(Enum):
@@ -17,14 +17,10 @@ def detect_platform_of_keyhac() -> Platform:
         return Platform.WINDOWS
     elif sys.platform == "darwin":
         return Platform.MAC
-
     raise ValueError(sys.platform)
 
 
-current_platform = detect_platform_of_keyhac()
-
-# 文字のリテラル表現と、Keyhacの特殊なキー表現の対応リスト。
-keyhac_literal_special_source = [
+keyhac_literal_special_source: List[Tuple[str, str]] = [
     ("[", "OpenBracket"),
     ("]", "CloseBracket"),
     ("\\", "BackSlash"),
@@ -37,23 +33,27 @@ keyhac_literal_special_source = [
     ("+", "Plus"),
     (";", "Semicolon"),
 ]
+""""文字のリテラル表現と、Keyhacの特殊なキー表現の対応リスト。"""
 
 
-def keyhac_literal_special(literal: str):
+def keyhac_literal_special(literal: str) -> Optional[str]:
     """リテラル表現をKeyhacの表現に変換する。"""
     return next((t[1] for t in keyhac_literal_special_source if t[0] == literal), None)
 
 
-def keyhac_special_literal(special: str):
+def keyhac_special_literal(special: str) -> Optional[str]:
     """Keyhacの表現をリテラル表現に変換する。"""
     return next((t[0] for t in keyhac_literal_special_source if t[1] == special), None)
 
 
-# USキーボードでDvorakとQwertyで差分が生じそうなリスト。
-# リテラル表現。
-# Dvorak的には=と+は=をプレーンとするが、Keyhac的には+がプレーン。
 dvorak = "[]\\`',.pyfgcrl/+aoeuidhtns-;qjkxbmwvz"
+"""
+USキーボードでDvorakとQwertyで差分が生じそうなリストのDvorak。
+Dvorak的には=と+は=をプレーンとするが、Keyhac的には+がプレーン。
+"""
+
 qwerty = "-+\\`qwertyuiop[]asdfghjkl;'zxcvbnm,./"
+"""USキーボードでDvorakとQwertyで差分が生じそうなリストのQWERTY。"""
 
 
 def d2q(key: str) -> str:
@@ -82,7 +82,7 @@ def q2d(key: str) -> str:
         return key
 
 
-process_name_of_linux = [
+process_name_of_linux: List[str] = [
     "mstsc.exe",  # WSLg
     "msrdc.exe",  # WSLg
     "XWin.exe",  # Cygwin/X
@@ -313,20 +313,6 @@ def configure_windows(keymap) -> None:
     set_keymap_weblike(keymap, keymap.defineWindowKeymap(exe_name="Amazon Music.exe"))
 
 
-def configure_mac(keymap) -> None:
-    keymap_global = keymap.defineWindowKeymap()
-
-    # グローバルな範囲でかな漢字変換のキーバインドを設定してしまう。
-    # MacではゲームしないのでSlackだけでなくグローバルでやっても気にならない。
-    # またEmacsなどでキャプチャ出来ないのでグローバルで行う必要がある。
-    keymap_global["Ctrl-" + d2q("Comma")] = "102"  # 英数
-    keymap_global["Ctrl-" + d2q("Period")] = "104"  # かな
-
-
 def configure(keymap) -> None:
     keymap.setTheme("black")
-
-    if current_platform == Platform.WINDOWS:
-        configure_windows(keymap)
-    elif current_platform == Platform.MAC:
-        configure_mac(keymap)
+    configure_windows(keymap)
