@@ -309,7 +309,7 @@ def configure_windows(keymap) -> None:
     keymap_slack["C-Comma"] = "29"  # 無変換
     keymap_slack["C-Period"] = "28"  # 変換
 
-    set_keymap_weblike(keymap, keymap.defineWindowKeymap(exe_name="Amazon Music.exe"))
+    set_keymap_weblike(keymap, keymap.defineWindowKeymap(exe_name="YouTube Music.exe"))
 
 
 def configure(keymap) -> None:
