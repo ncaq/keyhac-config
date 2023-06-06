@@ -269,8 +269,7 @@ def configure_windows(keymap) -> None:
     )
     keymap_global["W-z"] = run_or_raise(
         keymap,
-        exe_name="Amazon Music.exe",
-        command=r"shell:appsFolder\AmazonMobileLLC.AmazonMusic_kc6t79cpj4tp0!AmazonMobileLLC.AmazonMusic",
+        exe_name="YouTube Music.exe",
     )
 
     set_keymap_dvorak_for_linux(
