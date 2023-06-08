@@ -1,4 +1,5 @@
 ﻿import itertools
+import os
 import sys
 from enum import Enum
 from pathlib import WindowsPath
@@ -269,7 +270,14 @@ def configure_windows(keymap) -> None:
     )
     keymap_global["W-z"] = run_or_raise(
         keymap,
-        exe_name="YouTube Music.exe",
+        exe_name=str(
+            WindowsPath(
+                os.environ["LOCALAPPDATA"],
+                "Programs",
+                "youtube-music",
+                "YouTube Music.exe",
+            )
+        ),
     )
 
     set_keymap_dvorak_for_linux(
