@@ -227,7 +227,9 @@ def run_or_raise(
 
 
 def program_files(*pathsegments: str) -> WindowsPath:
-    return WindowsPath("C:", "Program Files", *pathsegments)
+    """`C:/Program Files/`以下を単純に参照します。"""
+    # Keyhacが現状32bitで動いているため、64ビット版のディレクトリを指してくれるように指定します。
+    return WindowsPath(os.environ["ProgramW6432"], *pathsegments)
 
 
 def configure_windows(keymap) -> None:
