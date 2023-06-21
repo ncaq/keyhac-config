@@ -120,15 +120,6 @@ def check_func_emacs(window) -> bool:
     )
 
 
-def check_func_mikutter(window) -> bool:
-    """WSLのmikutterを検出します。Windowsネイティブでmikutterを動かせたことがないのでネイティブには対応していません。"""
-    return (
-        window.getProcessName() in process_name_of_linux
-        # `mikutter`や`mikutter (Ubuntu)`が存在する。
-        and window.getText().startswith("mikutter")
-    )
-
-
 def set_keymap_dvorak_for_linux(_, keymap_window) -> None:
     """WSLg向けに全てDvorakに変換する。"""
     # "C-M-a"みたいなprefixを全て合成する。
@@ -253,12 +244,6 @@ def configure_windows(keymap) -> None:
         command="wslg.exe",
         param="--cd ~ -d Ubuntu -- emacs",
     )
-    keymap_global["W-s"] = run_or_raise(
-        keymap,
-        check_func=check_func_mikutter,
-        command="wslg.exe",
-        param="--cd ~ -d Ubuntu -- ~/.local/bin/mikutter",
-    )
     keymap_global["W-Minus"] = run_or_raise(keymap, exe_name="slack.exe")
     keymap_global["W-b"] = run_or_raise(
         keymap,
@@ -304,10 +289,6 @@ def configure_windows(keymap) -> None:
     keymap_emacs["C-m"] = "Enter"
 
     set_keymap_weblike(keymap, keymap.defineWindowKeymap(exe_name="chrome.exe"))
-
-    keymap_mikutter = keymap.defineWindowKeymap(check_func=check_func_mikutter)
-    set_keymap_weblike(keymap, keymap_mikutter, True)
-    keymap_mikutter["C-m"] = "S-Enter"
 
     keymap_slack = keymap.defineWindowKeymap(exe_name="slack.exe")
     set_keymap_weblike(keymap, keymap_slack)
