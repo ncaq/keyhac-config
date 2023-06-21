@@ -227,8 +227,12 @@ def configure_windows(keymap) -> None:
     keymap.clipboard_history.enableHook(False)
 
     keymap_global = keymap.defineWindowKeymap()
-    keymap_global["W-Semicolon"] = "W-Up"
+    # W-qで大抵のウィンドウを閉じれるようにします。
     keymap_global["W-q"] = "A-F4"
+    # ウィンドウ最大化を簡単に行えるようにします。
+    keymap_global["W-Semicolon"] = "W-Up"
+    # アクションセンターではなく通知を開きます。
+    keymap_global["W-a"] = "W-n"
 
     keymap_global["W-h"] = run_or_raise(
         keymap,
