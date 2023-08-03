@@ -306,6 +306,8 @@ def configure_windows(keymap) -> None:
 
     set_keymap_weblike(keymap, keymap.defineWindowKeymap(exe_name="YouTube Music.exe"))
 
+    set_keymap_weblike(keymap, keymap.defineWindowKeymap(exe_name="Code.exe"))
+
 
 def configure(keymap) -> None:
     keymap.setTheme("black")
