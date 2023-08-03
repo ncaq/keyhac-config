@@ -292,6 +292,16 @@ def configure_windows(keymap) -> None:
         keymap, keymap.defineWindowKeymap(check_func=check_func_linux)
     )
 
+    keymap_discord = keymap.defineWindowKeymap(exe_name="Discord.exe")
+    set_keymap_weblike(keymap, keymap_discord)
+    keymap_discord["A-j"] = "A-S-Down"
+    keymap_discord["A-k"] = "A-S-Up"
+    keymap_discord["A-t"] = "A-Up"
+    keymap_discord["A-n"] = "A-Down"
+    keymap_discord["C-m"] = "S-Enter"
+    keymap_discord["C-Comma"] = "29"  # 無変換
+    keymap_discord["C-Period"] = "28"  # 変換
+
     set_keymap_weblike(
         keymap,
         keymap.defineWindowKeymap(
