@@ -223,6 +223,18 @@ def program_files(*pathsegments: str) -> WindowsPath:
     return WindowsPath(os.environ["ProgramW6432"], *pathsegments)
 
 
+def start_menu_programs(*pathsegments: str) -> WindowsPath:
+    """
+    典型的には、
+    `C:/Users/ユーザ名/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/`
+    以下を参照します。
+    """
+    roaming = os.environ["APPDATA"]
+    return WindowsPath(
+        roaming, "Microsoft", "Windows", "Start Menu", "Programs", *pathsegments
+    )
+
+
 def configure_windows(keymap) -> None:
     keymap.clipboard_history.enableHook(False)
 
@@ -234,6 +246,11 @@ def configure_windows(keymap) -> None:
     # アクションセンターではなく通知を開きます。
     keymap_global["W-a"] = "W-n"
 
+    keymap_global["W-d"] = run_or_raise(
+        keymap,
+        exe_name="Discord.exe",
+        command=str(start_menu_programs("Discord Inc", "Discord.lnk")),
+    )
     keymap_global["W-h"] = run_or_raise(
         keymap,
         exe_name="firefox.exe",
