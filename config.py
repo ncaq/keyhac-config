@@ -262,7 +262,7 @@ def configure_windows(keymap) -> None:
     keymap_global["W-n"] = run_or_raise(
         keymap,
         check_func=check_func_emacs,
-        command="wslg.exe",
+        command=str(program_files("WSL", "wslg.exe")),
         param="--cd ~ -d Ubuntu -- emacs",
     )
     keymap_global["W-Minus"] = run_or_raise(keymap, exe_name="slack.exe")
