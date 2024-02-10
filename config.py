@@ -265,7 +265,7 @@ def configure_windows(keymap) -> None:
         command=str(program_files("WSL", "wslg.exe")),
         param="--cd ~ -d Ubuntu -- emacs",
     )
-    keymap_global["W-Minus"] = run_or_raise(keymap, exe_name="slack.exe")
+    keymap_global["W-s"] = run_or_raise(keymap, exe_name="slack.exe")
     keymap_global["W-b"] = run_or_raise(
         keymap,
         exe_name="KeePassXC.exe",
