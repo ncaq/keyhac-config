@@ -266,6 +266,7 @@ def configure_windows(keymap) -> None:
         param="--cd ~ -d Ubuntu -- emacs",
     )
     keymap_global["W-s"] = run_or_raise(keymap, exe_name="slack.exe")
+    keymap_global["W-c"] = run_or_raise(keymap, exe_name="claude.exe")
     keymap_global["W-b"] = run_or_raise(
         keymap,
         exe_name="KeePassXC.exe",
@@ -330,6 +331,13 @@ def configure_windows(keymap) -> None:
     keymap_slack["Enter"] = "C-Enter"
     keymap_slack["C-Comma"] = "29"  # 無変換
     keymap_slack["C-Period"] = "28"  # 変換
+
+    keymap_claude = keymap.defineWindowKeymap(exe_name="claude.exe")
+    set_keymap_weblike(keymap, keymap_claude)
+    keymap_claude["C-m"] = "S-Enter"
+    keymap_claude["Enter"] = "C-Enter"
+    keymap_claude["C-Comma"] = "29"  # 無変換
+    keymap_claude["C-Period"] = "28"  # 変換
 
     set_keymap_weblike(keymap, keymap.defineWindowKeymap(exe_name="YouTube Music.exe"))
 
