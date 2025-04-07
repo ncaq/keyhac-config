@@ -266,7 +266,11 @@ def configure_windows(keymap) -> None:
         param="--cd ~ -d Ubuntu -- emacs",
     )
     keymap_global["W-s"] = run_or_raise(keymap, exe_name="slack.exe")
-    keymap_global["W-c"] = run_or_raise(keymap, exe_name="claude.exe")
+    keymap_global["W-c"] = run_or_raise(
+        keymap,
+        exe_name="claude.exe",
+        command=str(start_menu_programs("Anthropic", "Claude.lnk")),
+    )
     keymap_global["W-b"] = run_or_raise(
         keymap,
         exe_name="KeePassXC.exe",
