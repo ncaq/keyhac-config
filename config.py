@@ -338,6 +338,7 @@ def configure_windows(keymap) -> None:
 
     keymap_claude = keymap.defineWindowKeymap(exe_name="claude.exe")
     set_keymap_weblike(keymap, keymap_claude)
+    keymap_claude["C-o"] = "C-n"  # 新規チャット
     keymap_claude["C-m"] = "S-Enter"
     keymap_claude["Enter"] = "C-Enter"
     keymap_claude["C-Comma"] = "29"  # 無変換
