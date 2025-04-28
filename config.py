@@ -346,6 +346,14 @@ def configure_windows(keymap) -> None:
 
     set_keymap_weblike(keymap, keymap.defineWindowKeymap(exe_name="YouTube Music.exe"))
 
+    keymap_lm_studio = keymap.defineWindowKeymap(exe_name="LM Studio.exe")
+    set_keymap_weblike(keymap, keymap_lm_studio)
+    keymap_lm_studio["C-o"] = "C-n"  # 新規チャット
+    keymap_lm_studio["C-m"] = "S-Enter"
+    keymap_lm_studio["Enter"] = "C-Enter"
+    keymap_lm_studio["C-Comma"] = "29"  # 無変換
+    keymap_lm_studio["C-Period"] = "28"  # 変換
+
     set_keymap_weblike(keymap, keymap.defineWindowKeymap(exe_name="Code.exe"))
 
 
