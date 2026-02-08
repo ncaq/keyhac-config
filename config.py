@@ -263,7 +263,7 @@ def configure_windows(keymap) -> None:
         keymap,
         check_func=check_func_emacs,
         command=str(program_files("WSL", "wslg.exe")),
-        param="--cd ~ -d NixOS -- emacsclient --no-wait -a emacs",
+        param="--cd ~ -d NixOS -- emacsclient --create-frame --no-wait -a emacs",
     )
     keymap_global["W-s"] = run_or_raise(keymap, exe_name="slack.exe")
     keymap_global["W-c"] = run_or_raise(
